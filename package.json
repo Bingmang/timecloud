@@ -1,0 +1,31 @@
+{
+  "name": "timecloud",
+  "version": "0.0.1",
+  "author": "Bingmang",
+  "license": "MIT",
+  "description": "A distributed scheduling system based on node and typescript.",
+  "keywords": [
+    "distributed",
+    "schedule"
+  ],
+  "main": ".build/lib/index.js",
+  "typings": ".build/lib/index.d.ts",
+  "scripts": {
+    "test": "istanbul cover _mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bingmang/timecloud.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Bingmang/timecloud/issues"
+  },
+  "homepage": "https://github.com/Bingmang/timecloud#readme",
+  "dependencies": {
+    "lodash": "^4.17.4"
+  },
+  "devDependencies": {
+    "istanbul-harmony": "^0.3.16",
+    "mocha": "^4.0.1"
+  }
+}
