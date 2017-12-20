@@ -8,8 +8,8 @@
     "distributed",
     "schedule"
   ],
-  "main": ".build/lib/index.js",
-  "typings": ".build/lib/index.d.ts",
+  "main": ".build/index.js",
+  "typings": ".build/index.d.ts",
   "scripts": {
     "test": "istanbul cover _mocha"
   },
@@ -22,9 +22,16 @@
   },
   "homepage": "https://github.com/Bingmang/timecloud#readme",
   "dependencies": {
-    "lodash": "^4.17.4"
+    "bluebird": "^3.5.1",
+    "lodash": "^4.17.4",
+    "tslib": "^1.8.1"
   },
   "devDependencies": {
+    "@types/agenda": "^1.0.1",
+    "@types/bluebird": "^3.5.19",
+    "@types/es6-promise": "^0.0.33",
+    "@types/lodash": "^4.14.91",
+    "@types/node": "^8.5.1",
     "istanbul-harmony": "^0.3.16",
     "mocha": "^4.0.1"
   }

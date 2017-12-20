@@ -4,16 +4,13 @@
     "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
     "module": "commonjs",
+    "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "outDir": ".build",
     "noImplicitAny": true,
     "removeComments": false,
     "sourceMap": false,
-    "target": "es5"
+    "target": "es5",
   },
-  "include": [
-    "lib/**/*",
-    "test/**/*"
-  ]
 }
