@@ -2,27 +2,33 @@ import * as _ from 'lodash'
 import * as Bluebird from 'bluebird'
 import * as child_process from 'child_process'
 
+export interface IClassProcess {
+  init(): Promise<void>
+  scanAlivePids(delay: number): Promise<number[]>
+  signal(signal: string): void
+  killAll(): void
+}
+
 enum STATUS {
-  ALIVE = 1,
+  VOID,
+  ALIVE,
   KILEED
 }
 
-interface PidTree {
+interface IPidTree {
   [pid: string]: number[]
 }
 
-interface PidStatusMap {
+interface IPidStatusMap {
   [pid: string]: STATUS
 }
-
-
 
 /**
  * 建立进程树，功能是可以在任务的所有子进程下进行广播
  */
-export class Process {
+export class Process implements IClassProcess{
   private _pid: number
-  private _pid_tree: PidTree
+  private _pid_tree: IPidTree
   private _pid_list: number[]
 
   public constructor(pid: number) {
@@ -32,48 +38,56 @@ export class Process {
   }
 
   /**
+   * 初始化进程树
+   */
+  public async init(): Promise<void> {
+    this._pid_tree = await buildProcessTree(this._pid)
+    this._pid_list = _.map(_.keys(this._pid_tree), _.parseInt)
+  }
+
+  /**
    * 等待一段时间后，查询进程树中任然存在的进程
    */
-  public async checkAliveWithDelay(delay: number = 0): Promise<number[]> {
+  public async scanAlivePids(delay: number = 0): Promise<number[]> {
+    await Bluebird.delay(delay)
     if (!this._pid_tree) {
       return []
     }
-    await Bluebird.delay(delay)
-    return checkPidsAlive(this._pid_list)
+    return scanAlivePids(this._pid_list)
   }
 
   /**
    * 为当前进程树中的每个进程发送信号
    */
-  public async sendSignal(signal: string): Promise<any> {
+  public signal(signal: string): void {
     if (!this._pid_tree || !this._pid_list.length) {
       return
     }
-    return signalAllPid(this._pid_tree, signal)
+    signalAllPid(this._pid_tree, signal)
   }
 
   /**
-   * 初始化进程树
+   * 杀死所有进程
    */
-  public async init() {
-    this._pid_tree = await buildProcessTree(this._pid)
-    this._pid_list = _.map(_.keys(this._pid_tree), _.parseInt)
+  public killAll(): void {
+    this.signal('SIGKILL')
   }
 }
 
 /**
  * 建立ProcessTree, 查询多次
  */
-function buildProcessTree(pid: number): Promise<PidTree> {
+function buildProcessTree(pid: number): Promise<IPidTree> {
   return new Promise((resolve, reject) => {
-    let tree: PidTree = {}
+    let tree: IPidTree = {}
     let pids_to_process: any = {}
     tree[pid] = []
     pids_to_process[pid] = STATUS.ALIVE
     _buildProcessTreeCore(pid, tree, pids_to_process, resolve)
   })
 }
-function _buildProcessTreeCore(parent_pid: number, tree: PidTree, pids_to_process: PidStatusMap, callback: Function): void {
+
+function _buildProcessTreeCore(parent_pid: number, tree: IPidTree, pids_to_process: IPidStatusMap, callback: Function): void {
   let ps = child_process.spawn(
     'ps', ['-o', 'pid', '--no-headers', '--ppid', parent_pid.toString()])
   let all_data: string = ''
@@ -101,7 +115,7 @@ function _buildProcessTreeCore(parent_pid: number, tree: PidTree, pids_to_proces
 /**
  * 检查pid_list中还在进程中的pid, 只查询一次
  */
-function checkPidsAlive(pid_list: number[]): Promise<number[]> {
+function scanAlivePids(pid_list: number[]): Promise<number[]> {
   return new Promise((resolve, reject) => {
     let query: string = _.join(pid_list, '|')
     let command: string = `ps -e -o pid | grep -E '${query}'`
@@ -114,8 +128,8 @@ function checkPidsAlive(pid_list: number[]): Promise<number[]> {
 /**
  * 对进程树中的所有进程传递信号
  */
-function signalAllPid(tree: PidTree, signal: string): void {
-  let killed: PidStatusMap = {}
+function signalAllPid(tree: IPidTree, signal: string): void {
+  let killed: IPidStatusMap = {}
   _.forEach(_.keys(tree), pid => {
     _.forEach(tree[pid], ppid => {
       if (!killed[ppid]) {
@@ -129,6 +143,7 @@ function signalAllPid(tree: PidTree, signal: string): void {
     }
   })
 }
+
 function signalPid(pid: number, signal: string): void {
   try {
     process.kill(pid, signal)
