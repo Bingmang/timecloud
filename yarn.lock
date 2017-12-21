@@ -2,6 +2,48 @@
 # yarn lockfile v1
 
 
+"@types/agenda@^1.0.1":
+  version "1.0.1"
+  resolved "http://registry.npm.taobao.org/@types/agenda/download/@types/agenda-1.0.1.tgz#9b309d634c30e7634f192f2e530f303684298f17"
+  dependencies:
+    "@types/events" "*"
+    "@types/mongodb" "*"
+    "@types/node" "*"
+
+"@types/bluebird@^3.5.19":
+  version "3.5.19"
+  resolved "http://registry.npm.taobao.org/@types/bluebird/download/@types/bluebird-3.5.19.tgz#1a47308819ac2d1d6d1ca4f5d800ac84924100de"
+
+"@types/bson@*":
+  version "1.0.6"
+  resolved "http://registry.npm.taobao.org/@types/bson/download/@types/bson-1.0.6.tgz#8691f042d99dd163a5eb4dd6dde587d3449f7cda"
+  dependencies:
+    "@types/node" "*"
+
+"@types/es6-promise@^0.0.33":
+  version "0.0.33"
+  resolved "http://registry.npm.taobao.org/@types/es6-promise/download/@types/es6-promise-0.0.33.tgz#280a707e62b1b6bef1a86cc0861ec63cd06c7ff3"
+
+"@types/events@*":
+  version "1.1.0"
+  resolved "http://registry.npm.taobao.org/@types/events/download/@types/events-1.1.0.tgz#93b1be91f63c184450385272c47b6496fd028e02"
+
+"@types/lodash@^4.14.91":
+  version "4.14.91"
+  resolved "http://registry.npm.taobao.org/@types/lodash/download/@types/lodash-4.14.91.tgz#794611b28056d16b5436059c6d800b39d573cd3a"
+
+"@types/mongodb@*":
+  version "2.2.17"
+  resolved "http://registry.npm.taobao.org/@types/mongodb/download/@types/mongodb-2.2.17.tgz#cc44e83de8be79989dc5dce6898862cf5c8a0b52"
+  dependencies:
+    "@types/bson" "*"
+    "@types/events" "*"
+    "@types/node" "*"
+
+"@types/node@*", "@types/node@^8.5.1":
+  version "8.5.1"
+  resolved "http://registry.npm.taobao.org/@types/node/download/@types/node-8.5.1.tgz#4ec3020bcdfe2abffeef9ba3fbf26fca097514b5"
+
 abbrev@1:
   version "1.1.1"
   resolved "http://npm.jd.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -31,6 +73,10 @@ async@~0.2.6:
 balanced-match@^1.0.0:
   version "1.0.0"
   resolved "http://npm.jd.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
+
+bluebird@^3.5.1:
+  version "3.5.1"
+  resolved "http://registry.npm.taobao.org/bluebird/download/bluebird-3.5.1.tgz#d9551f9de98f1fcda1e683d17ee91a0602ee2eb9"
 
 brace-expansion@^1.0.0, brace-expansion@^1.1.7:
   version "1.1.8"
@@ -203,7 +249,7 @@ levn@~0.2.5:
 
 lodash@^4.17.4:
   version "4.17.4"
-  resolved "http://npm.jd.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
+  resolved "http://registry.npm.taobao.org/lodash/download/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
 "minimatch@2 || 3", minimatch@^3.0.4:
   version "3.0.4"
@@ -317,6 +363,10 @@ supports-color@4.4.0:
   resolved "http://npm.jd.com/supports-color/-/supports-color-4.4.0.tgz#883f7ddabc165142b2a61427f3352ded195d1a3e"
   dependencies:
     has-flag "^2.0.0"
+
+tslib@^1.8.1:
+  version "1.8.1"
+  resolved "http://registry.npm.taobao.org/tslib/download/tslib-1.8.1.tgz#6946af2d1d651a7b1863b531d6e5afa41aa44eac"
 
 type-check@~0.3.1:
   version "0.3.2"
