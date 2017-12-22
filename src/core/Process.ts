@@ -2,9 +2,13 @@ import * as _ from 'lodash'
 import * as Bluebird from 'bluebird'
 import * as child_process from 'child_process'
 
-export interface IClassProcess {
+export interface IPidList extends Array<number>{
+  [index: number]: number
+}
+
+export interface IProcess {
   init(): Promise<void>
-  scanAlivePids(delay: number): Promise<number[]>
+  scanAlivePids(delay?: number): Promise<IPidList>
   signal(signal: string): void
   killAll(): void
 }
@@ -16,20 +20,22 @@ enum STATUS {
 }
 
 interface IPidTree {
-  [pid: string]: number[]
+  [pid: string]: IPidList
 }
 
 interface IPidStatusMap {
   [pid: string]: STATUS
 }
 
+
 /**
  * 建立进程树，功能是可以在任务的所有子进程下进行广播
  */
-export class Process implements IClassProcess{
+export class Process implements IProcess{
+
   private _pid: number
   private _pid_tree: IPidTree
-  private _pid_list: number[]
+  private _pid_list: IPidList
 
   public constructor(pid: number) {
     this._pid = pid
@@ -48,7 +54,7 @@ export class Process implements IClassProcess{
   /**
    * 等待一段时间后，查询进程树中任然存在的进程
    */
-  public async scanAlivePids(delay: number = 0): Promise<number[]> {
+  public async scanAlivePids(delay: number = 0): Promise<IPidList> {
     await Bluebird.delay(delay)
     if (!this._pid_tree) {
       return []
@@ -72,6 +78,7 @@ export class Process implements IClassProcess{
   public killAll(): void {
     this.signal('SIGKILL')
   }
+
 }
 
 /**
@@ -83,7 +90,7 @@ function buildProcessTree(pid: number): Promise<IPidTree> {
     let pids_to_process: any = {}
     tree[pid] = []
     pids_to_process[pid] = STATUS.ALIVE
-    _buildProcessTreeCore(pid, tree, pids_to_process, resolve)
+    _buildProcessTreeCore(pid, tree, pids_to_process, () => resolve(tree))
   })
 }
 
@@ -115,7 +122,7 @@ function _buildProcessTreeCore(parent_pid: number, tree: IPidTree, pids_to_proce
 /**
  * 检查pid_list中还在进程中的pid, 只查询一次
  */
-function scanAlivePids(pid_list: number[]): Promise<number[]> {
+function scanAlivePids(pid_list: IPidList): Promise<IPidList> {
   return new Promise((resolve, reject) => {
     let query: string = _.join(pid_list, '|')
     let command: string = `ps -e -o pid | grep -E '${query}'`

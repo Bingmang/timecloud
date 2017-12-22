@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "lib": [
+      "es2016"
+    ],
     "declaration": true,
     "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
@@ -11,6 +14,6 @@
     "noImplicitAny": true,
     "removeComments": false,
     "sourceMap": false,
-    "target": "es5",
-  },
+    "target": "es5"
+  }
 }
