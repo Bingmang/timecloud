@@ -94,7 +94,12 @@ function buildProcessTree(pid: number): Promise<IPidTree> {
   })
 }
 
-function _buildProcessTreeCore(parent_pid: number, tree: IPidTree, pids_to_process: IPidStatusMap, callback: Function): void {
+function _buildProcessTreeCore(
+  parent_pid: number, 
+  tree: IPidTree, 
+  pids_to_process: IPidStatusMap, 
+  callback: Function
+): void {
   let ps = child_process.spawn(
     'ps', ['-o', 'pid', '--no-headers', '--ppid', parent_pid.toString()])
   let all_data: string = ''
@@ -127,7 +132,9 @@ function scanAlivePids(pid_list: IPidList): Promise<IPidList> {
     let query: string = _.join(pid_list, '|')
     let command: string = `ps -e -o pid | grep -E '${query}'`
     child_process.exec(command, (err, stdout, stderr) => {
-      err ? resolve([]) : resolve(_.map(_.compact(_.split(stdout, '\n')), Number))
+      err ? resolve([]) : resolve(
+        _.map(_.compact(_.split(stdout, '\n')), Number)
+      )
     })
   })
 }
