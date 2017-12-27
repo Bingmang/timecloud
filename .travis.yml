@@ -6,3 +6,5 @@ node_js:
   - "9"
 script:
   - npm test
+after_success: 
+  - npm run git:cover
