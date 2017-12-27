@@ -10,10 +10,19 @@
   ],
   "main": ".build/index.js",
   "typings": ".build/index.d.ts",
+  "files": [
+    ".build",
+    "LICENSE"
+  ],
   "scripts": {
-    "compile": "tsc",
-    "test": "npm-run-all compile test:mocha",
-    "test:mocha": "mocha --timeout 0 --reporter spec --colors \".build/test/**/*.test.js\""
+    "build": "npm-run-all build:clean build:tsc",
+    "build:tsc": "tsc",
+    "build:clean": "node_modules/.bin/rimraf .build",
+    "test": "npm-run-all test:lint test:cover",
+    "test:mocha": "./node_modules/.bin/_mocha --recursive --timeout 0 --compilers ts:ts-node/register --bail",
+    "test:cover": "nyc npm run test:mocha",
+    "test:lint": "tslint \"src/**/*.ts\" --project tsconfig.json",
+    "prepublish": "npm-run-all build"
   },
   "repository": {
     "type": "git",
@@ -23,9 +32,13 @@
     "url": "https://github.com/Bingmang/timecloud/issues"
   },
   "homepage": "https://github.com/Bingmang/timecloud#readme",
+  "engines": {
+    "node": ">=6.0.0"
+  },
   "dependencies": {
     "bluebird": "^3.5.1",
     "lodash": "^4.17.4",
+    "log4js": "^2.4.1",
     "tslib": "^1.8.1"
   },
   "devDependencies": {
@@ -38,7 +51,32 @@
     "chai": "^4.1.2",
     "mocha": "^4.0.1",
     "npm-run-all": "^4.1.2",
+    "nyc": "^11.4.1",
+    "rimraf": "^2.6.2",
+    "ts-node": "^4.1.0",
     "tslint": "^5.8.0",
     "typescript": "^2.6.2"
+  },
+  "nyc": {
+    "check-coverage": true,
+    "report-dir": "./.cov",
+    "include": [
+      "src/*.ts",
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "typings"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "html",
+      "text-summary"
+    ],
+    "all": true
   }
 }

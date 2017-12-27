@@ -1,31 +1,43 @@
 import { assert } from 'chai'
-import { IPidList, IProcess, Process } from '../../src/core'
-import { spawn } from 'child_process' 
+import { IPidList, IProcess, Process } from '../../src/'
+import { spawn, ChildProcess } from 'child_process' 
 
 describe('core/Process', () => {
 
-  it('scanAlivePids', async () => {
-    let pmaster: IProcess = new Process(process.pid)
-    let sp = spawn('sleep', ['1'])
-    await pmaster.init()
-    let alive_pids: IPidList = await pmaster.scanAlivePids()
-    assert(alive_pids.includes(sp.pid))
+  let pmaster: Process, pchild: Process, sp: ChildProcess
+
+  beforeEach(() => {
+    pmaster = new Process(process.pid)
+    sp = spawn('sleep', ['3'])
+    pchild = new Process(sp.pid)
   })
 
-  it('signal', async () => {
-    // spawn a process then kill it.
-    let sp = spawn('sleep', ['3'])
-    let pmaster: IProcess = new Process(process.pid)
-    await pmaster.init()
-    let pchild: IProcess = new Process(sp.pid)
-    await pchild.init()
-    let alive_pids: IPidList = await pmaster.scanAlivePids()
-    // can find the sp.pid
-    assert(alive_pids.includes(sp.pid))
-    pchild.killAll()
-    alive_pids = await pmaster.scanAlivePids()
-    // after killed, can not find the sp.pid
-    assert(!alive_pids.includes(sp.pid))
+  afterEach(() => {
+    pmaster = pchild = sp = undefined
   })
-  
+
+  it('scanAlivePids without init', async () => {
+    let alive_pids: IPidList = await pmaster.scanAlivePids()
+    assert.lengthOf(alive_pids, 0)
+  })
+
+  it('scanAlivePids', async () => {
+    await pmaster.init()
+    let alive_pids: IPidList = await pmaster.scanAlivePids()
+    assert.include(alive_pids, sp.pid)
+  })
+
+  it('signal without init', async () => {
+    pchild.signal('SIGKILL')
+    assert.isFalse(sp.killed)
+  })
+
+  it('signal SIGKILL', async () => {
+    await pmaster.init()
+    await pchild.init()
+    pchild.killAll()
+    let alive_pids = await pmaster.scanAlivePids(100)
+    assert.notInclude(alive_pids, sp.pid)
+  })
+
 })
