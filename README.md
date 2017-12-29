@@ -3,6 +3,7 @@
 
 [![NPM version][npm-image]][npm-url]
 [![Build status][travis-image]][travis-url]
+[![Coverage Status][coveralls-image]][coveralls-url]
 [![License][license-image]][license-url]
 [![Downloads][downloads-image]][downloads-url]
 
@@ -75,9 +76,11 @@ When using the Timecloud or other GitHub logos, be sure to follow the [GitHub lo
 
 [npm-image]: https://img.shields.io/npm/v/timecloud.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/timecloud
-[travis-image]: https://img.shields.io/travis/Bingmang/timecloud.svg?style=flat-square
+[travis-image]: https://img.shields.io/travis/Bingmang/timecloud/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/Bingmang/timecloud
 [license-image]: http://img.shields.io/npm/l/timecloud.svg?style=flat-square
 [license-url]: LICENSE
 [downloads-image]: http://img.shields.io/npm/dm/timecloud.svg?style=flat-square
 [downloads-url]: https://npmjs.org/package/timecloud
+[coveralls-image]: https://img.shields.io/coveralls/github/bingmang/timecloud/master.svg?style=flat-square
+[coveralls-url]: https://coveralls.io/github/Bingmang/timecloud

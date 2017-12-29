@@ -1,5 +1,5 @@
 import { assert } from 'chai'
-import { IPidList, IProcess, Process } from '../../src/'
+import { PidList, Process } from '../../src/'
 import { spawn, ChildProcess } from 'child_process' 
 
 describe('core/Process', () => {
@@ -17,13 +17,13 @@ describe('core/Process', () => {
   })
 
   it('scanAlivePids without init', async () => {
-    let alive_pids: IPidList = await pmaster.scanAlivePids()
+    let alive_pids: PidList = await pmaster.scanAlivePids()
     assert.lengthOf(alive_pids, 0)
   })
 
   it('scanAlivePids', async () => {
     await pmaster.init()
-    let alive_pids: IPidList = await pmaster.scanAlivePids()
+    let alive_pids: PidList = await pmaster.scanAlivePids()
     assert.include(alive_pids, sp.pid)
   })
 

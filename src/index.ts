@@ -5,3 +5,4 @@ export {
 }
 
 export * from './core/Process'
+export * from './core/Job'
